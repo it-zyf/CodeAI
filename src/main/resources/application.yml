@@ -4,4 +4,14 @@ spring:
 server:
   servlet:
     context-path: /api
-  port: 90001
+  port: 8082
+# springdoc-openapi
+springdoc:
+  group-configs:
+    - group: 'default'
+      packages-to-scan: com.xyy.codeai.controller
+# knife4j
+knife4j:
+  enable: true
+  setting:
+    language: zh_cn
