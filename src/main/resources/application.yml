@@ -1,0 +1,7 @@
+spring:
+  application:
+    name: CodeAI
+server:
+  servlet:
+    context-path: /api
+  port: 90001
