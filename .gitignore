@@ -35,3 +35,6 @@ build/
 ### CUSTOM ###
 application-local.yml
 
+/mvnw.cmd
+/.gitattributes
+/mvnw
