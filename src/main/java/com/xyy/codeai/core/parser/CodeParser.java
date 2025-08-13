@@ -5,7 +5,7 @@ import com.xyy.codeai.model.enums.CodeGenTypeEnum;
 /**
  * 代码解析器策略接口
  * 
- * @author yupi
+ * @author java_boy
  */
 public interface CodeParser{
 
