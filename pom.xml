@@ -104,6 +104,15 @@
             <version>1.1.0-beta7</version>
         </dependency>
 
+        <!--langchain4j-reactor-->
+        <dependency>
+            <groupId>dev.langchain4j</groupId>
+            <artifactId>langchain4j-reactor</artifactId>
+            <version>1.1.0-beta7</version>
+        </dependency>
+
+
+
     </dependencies>
 
     <build>
