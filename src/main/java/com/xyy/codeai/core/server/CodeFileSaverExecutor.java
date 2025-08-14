@@ -9,9 +9,9 @@ import jakarta.annotation.PostConstruct;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
-import java.util.HashMap;
 import java.util.Map;
-import java.util.function.Function;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.BiFunction;
 
 /**
  * 代码文件保存执行器
@@ -22,7 +22,7 @@ import java.util.function.Function;
 @Service
 public class CodeFileSaverExecutor {
 
-    private static final Map<CodeGenTypeEnum, Function<Object, File>> REGISTER_MAP = new HashMap<>();
+    private static final Map<CodeGenTypeEnum, BiFunction<Object, Long, File>> REGISTER_MAP = new ConcurrentHashMap<>();
 
     private static final HtmlCodeFileSaverTemplate htmlCodeFileSaver = new HtmlCodeFileSaverTemplate();
 
@@ -31,8 +31,8 @@ public class CodeFileSaverExecutor {
 
     @PostConstruct
     public void register() {
-        REGISTER_MAP.put(CodeGenTypeEnum.HTML, codeResult -> htmlCodeFileSaver.saveCode((HtmlCodeResult) codeResult));
-        REGISTER_MAP.put(CodeGenTypeEnum.MULTI_FILE, codeResult -> multiFileCodeFileSaver.saveCode((MultiFileCodeResult) codeResult));
+        REGISTER_MAP.put(CodeGenTypeEnum.HTML, (codeResult, appId) -> htmlCodeFileSaver.saveCode((HtmlCodeResult) codeResult,appId));
+        REGISTER_MAP.put(CodeGenTypeEnum.MULTI_FILE, (codeResult, appId) -> multiFileCodeFileSaver.saveCode((MultiFileCodeResult) codeResult,appId));
     }
 
 
@@ -43,11 +43,11 @@ public class CodeFileSaverExecutor {
      * @param codeGenType 代码生成类型
      * @return 保存的目录
      */
-    public  File executeSaver(Object codeResult, CodeGenTypeEnum codeGenType) {
-        Function<Object, File> function = REGISTER_MAP.get(codeGenType);
+    public  File executeSaver(Object codeResult, CodeGenTypeEnum codeGenType,Long appId) {
+        BiFunction<Object, Long, File> function = REGISTER_MAP.get(codeGenType);
         if (function == null) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
-        return function.apply(codeResult);
+        return function.apply(codeResult,appId);
     }
 }

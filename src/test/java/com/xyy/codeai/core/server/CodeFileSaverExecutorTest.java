@@ -8,8 +8,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import java.io.File;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 /**
  * @author zyf
  * @date 2025/8/13 17:11
@@ -24,6 +22,6 @@ class CodeFileSaverExecutorTest {
     void executeSaver() {
         HtmlCodeResult htmlCodeResult = new HtmlCodeResult();
         htmlCodeResult.setHtmlCode("test");
-        File file = codeFileSaverExecutor.executeSaver(htmlCodeResult, CodeGenTypeEnum.HTML);
+        File file = codeFileSaverExecutor.executeSaver(htmlCodeResult, CodeGenTypeEnum.HTML,1L);
     }
 }
