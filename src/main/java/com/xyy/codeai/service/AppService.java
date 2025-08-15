@@ -54,4 +54,14 @@ public interface AppService extends IService<App> {
      */
     QueryWrapper getQueryWrapper(AppQueryRequest appQueryRequest);
 
+
+    /**
+     *  部署应用
+     * @param appId 应用 ID
+     * @param loginUser 登录用户
+     * @return
+     */
+    String deployApp(Long appId, User loginUser);
+
+
 }

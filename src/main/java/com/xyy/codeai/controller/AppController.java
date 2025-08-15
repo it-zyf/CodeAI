@@ -14,10 +14,7 @@ import com.xyy.codeai.constant.UserConstant;
 import com.xyy.codeai.exception.BusinessException;
 import com.xyy.codeai.exception.ErrorCode;
 import com.xyy.codeai.exception.ThrowUtils;
-import com.xyy.codeai.model.dto.app.AppAddRequest;
-import com.xyy.codeai.model.dto.app.AppAdminUpdateRequest;
-import com.xyy.codeai.model.dto.app.AppQueryRequest;
-import com.xyy.codeai.model.dto.app.AppUpdateRequest;
+import com.xyy.codeai.model.dto.app.*;
 import com.xyy.codeai.model.entity.App;
 import com.xyy.codeai.model.entity.User;
 import com.xyy.codeai.model.enums.CodeGenTypeEnum;
@@ -333,6 +330,27 @@ public class AppController {
         ThrowUtils.throwIf(app == null, ErrorCode.NOT_FOUND_ERROR);
         // 获取封装类
         return ResultUtils.success(appService.getAppVO(app));
+    }
+
+
+
+    /**
+     * 应用部署
+     *
+     * @param appDeployRequest 部署请求
+     * @param request          请求
+     * @return 部署 URL
+     */
+    @PostMapping("/deploy")
+    public BaseResponse<String> deployApp(@RequestBody AppDeployRequest appDeployRequest, HttpServletRequest request) {
+        ThrowUtils.throwIf(appDeployRequest == null, ErrorCode.PARAMS_ERROR);
+        Long appId = appDeployRequest.getAppId();
+        ThrowUtils.throwIf(appId == null || appId <= 0, ErrorCode.PARAMS_ERROR, "应用 ID 不能为空");
+        // 获取当前登录用户
+        User loginUser = userService.getLoginUser(request);
+        // 调用服务部署应用
+        String deployUrl = appService.deployApp(appId, loginUser);
+        return ResultUtils.success(deployUrl);
     }
 
 
