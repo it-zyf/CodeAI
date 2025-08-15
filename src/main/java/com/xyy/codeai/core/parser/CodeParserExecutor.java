@@ -29,7 +29,7 @@ public class CodeParserExecutor {
     public Object executeParser(String codeContent, CodeGenTypeEnum codeGenType) {
         return codeParsers.stream().filter(codeParser -> Objects.equals(codeParser.getType(), codeGenType))
                 .findFirst()
-                .orElseThrow(() -> new RuntimeException("未找到对应支付方式"))
+                .orElseThrow(() -> new RuntimeException("未找到对应代码生成方式"))
                 .parseCode(codeContent);
     }
 }
