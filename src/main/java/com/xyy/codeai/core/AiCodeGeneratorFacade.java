@@ -20,6 +20,7 @@ import java.io.File;
  */
 @Service
 @Slf4j
+@Deprecated
 public class AiCodeGeneratorFacade {
 
     @Resource

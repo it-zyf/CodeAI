@@ -6,12 +6,14 @@ import com.xyy.codeai.model.MultiFileCodeResult;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+
 /**
  * 代码解析器
  * 提供静态方法解析不同类型的代码内容
  *
  * @author java_boy
  */
+@Deprecated
 public class CodeParser {
 
     private static final Pattern HTML_CODE_PATTERN = Pattern.compile("```html\\s*\\n([\\s\\S]*?)```", Pattern.CASE_INSENSITIVE);
