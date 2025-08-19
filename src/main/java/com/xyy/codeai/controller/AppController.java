@@ -21,6 +21,7 @@ import com.xyy.codeai.model.enums.CodeGenTypeEnum;
 import com.xyy.codeai.model.vo.app.AppVO;
 import com.xyy.codeai.service.AppService;
 import com.xyy.codeai.service.UserService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.MediaType;
@@ -40,6 +41,7 @@ import java.util.Map;
  */
 @RestController
 @RequestMapping("/app")
+@Tag(name = "APP应用模块")
 public class AppController {
 
     @Resource

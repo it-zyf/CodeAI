@@ -13,6 +13,7 @@ import com.xyy.codeai.model.entity.ChatHistory;
 import com.xyy.codeai.model.entity.User;
 import com.xyy.codeai.service.ChatHistoryService;
 import com.xyy.codeai.service.UserService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.web.bind.annotation.*;
@@ -26,6 +27,7 @@ import java.time.LocalDateTime;
  */
 @RestController
 @RequestMapping("/chatHistory")
+@Tag(name = "历史对话模块")
 public class ChatHistoryController {
 
     @Resource
