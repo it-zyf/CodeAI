@@ -7,7 +7,7 @@ import com.xyy.codeai.model.enums.CodeGenTypeEnum;
  * 
  * @author java_boy
  */
-public interface CodeParser{
+public interface  CodeParser{
 
     /**
      * 解析代码内容
