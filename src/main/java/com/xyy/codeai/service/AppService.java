@@ -2,6 +2,7 @@ package com.xyy.codeai.service;
 
 import com.mybatisflex.core.query.QueryWrapper;
 import com.mybatisflex.core.service.IService;
+import com.xyy.codeai.model.dto.app.AppAddRequest;
 import com.xyy.codeai.model.dto.app.AppQueryRequest;
 import com.xyy.codeai.model.entity.App;
 import com.xyy.codeai.model.entity.User;
@@ -62,6 +63,14 @@ public interface AppService extends IService<App> {
      * @return
      */
     String deployApp(Long appId, User loginUser);
+
+    /**
+     * 创建应用
+     * @param appAddRequest 应用信息
+     * @param loginUser 登录用户
+     * @return
+     */
+    Long createApp(AppAddRequest appAddRequest, User loginUser);
 
 
 }

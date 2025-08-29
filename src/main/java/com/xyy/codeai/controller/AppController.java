@@ -17,7 +17,6 @@ import com.xyy.codeai.exception.ThrowUtils;
 import com.xyy.codeai.model.dto.app.*;
 import com.xyy.codeai.model.entity.App;
 import com.xyy.codeai.model.entity.User;
-import com.xyy.codeai.model.enums.CodeGenTypeEnum;
 import com.xyy.codeai.model.vo.app.AppVO;
 import com.xyy.codeai.service.AppService;
 import com.xyy.codeai.service.ProjectDownloadService;
@@ -55,6 +54,7 @@ public class AppController {
 
     @Resource
     private ProjectDownloadService projectDownloadService;
+
 
     /**
      * 应用聊天生成代码（流式 SSE）
@@ -104,23 +104,9 @@ public class AppController {
     @PostMapping("/add")
     public BaseResponse<Long> addApp(@RequestBody AppAddRequest appAddRequest, HttpServletRequest request) {
         ThrowUtils.throwIf(appAddRequest == null, ErrorCode.PARAMS_ERROR);
-        // 参数校验
-        String initPrompt = appAddRequest.getInitPrompt();
-        ThrowUtils.throwIf(StrUtil.isBlank(initPrompt), ErrorCode.PARAMS_ERROR, "初始化 prompt 不能为空");
-        // 获取当前登录用户
         User loginUser = userService.getLoginUser(request);
-        // 构造入库对象
-        App app = new App();
-        BeanUtil.copyProperties(appAddRequest, app);
-        app.setUserId(loginUser.getId());
-        // 应用名称暂时为 initPrompt 前 12 位
-        app.setAppName(initPrompt.substring(0, Math.min(initPrompt.length(), 12)));
-        // 暂时设置为多文件生成
-        app.setCodeGenType(CodeGenTypeEnum.MULTI_FILE.getValue());
-        // 插入数据库
-        boolean result = appService.save(app);
-        ThrowUtils.throwIf(!result, ErrorCode.OPERATION_ERROR);
-        return ResultUtils.success(app.getId());
+        Long appId = appService.createApp(appAddRequest,loginUser);
+        return ResultUtils.success(appId);
     }
 
 

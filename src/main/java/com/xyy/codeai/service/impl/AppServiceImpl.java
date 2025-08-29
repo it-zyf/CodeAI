@@ -7,6 +7,7 @@ import cn.hutool.core.util.RandomUtil;
 import cn.hutool.core.util.StrUtil;
 import com.mybatisflex.core.query.QueryWrapper;
 import com.mybatisflex.spring.service.impl.ServiceImpl;
+import com.xyy.codeai.ai.AiCodeGenTypeRoutingService;
 import com.xyy.codeai.constant.AppConstant;
 import com.xyy.codeai.core.AiCodeGeneratorFacade;
 import com.xyy.codeai.core.builder.VueProjectBuilder;
@@ -15,6 +16,7 @@ import com.xyy.codeai.exception.BusinessException;
 import com.xyy.codeai.exception.ErrorCode;
 import com.xyy.codeai.exception.ThrowUtils;
 import com.xyy.codeai.mapper.AppMapper;
+import com.xyy.codeai.model.dto.app.AppAddRequest;
 import com.xyy.codeai.model.dto.app.AppQueryRequest;
 import com.xyy.codeai.model.entity.App;
 import com.xyy.codeai.model.entity.User;
@@ -61,6 +63,9 @@ public class AppServiceImpl extends ServiceImpl<AppMapper, App> implements AppSe
 
     @Resource
     private VueProjectBuilder vueProjectBuilder;
+
+    @Resource
+    private AiCodeGenTypeRoutingService aiCodeGenTypeRoutingService;
 
 
 
@@ -212,6 +217,30 @@ public class AppServiceImpl extends ServiceImpl<AppMapper, App> implements AppSe
         // 10. 返回可访问的 URL
         return String.format("%s/%s/", AppConstant.CODE_DEPLOY_HOST, deployKey);
     }
+
+
+
+    @Override
+    public Long createApp(AppAddRequest appAddRequest, User loginUser) {
+        // 参数校验
+        String initPrompt = appAddRequest.getInitPrompt();
+        ThrowUtils.throwIf(StrUtil.isBlank(initPrompt), ErrorCode.PARAMS_ERROR, "初始化 prompt 不能为空");
+        // 构造入库对象
+        App app = new App();
+        BeanUtil.copyProperties(appAddRequest, app);
+        app.setUserId(loginUser.getId());
+        // 应用名称暂时为 initPrompt 前 12 位
+        app.setAppName(initPrompt.substring(0, Math.min(initPrompt.length(), 12)));
+        // 使用 AI 智能选择代码生成类型
+        CodeGenTypeEnum selectedCodeGenType = aiCodeGenTypeRoutingService.routeCodeGenType(initPrompt);
+        app.setCodeGenType(selectedCodeGenType.getValue());
+        // 插入数据库
+        boolean result = this.save(app);
+        ThrowUtils.throwIf(!result, ErrorCode.OPERATION_ERROR);
+        log.info("应用创建成功，ID: {}, 类型: {}", app.getId(), selectedCodeGenType.getValue());
+        return app.getId();
+    }
+
 
 
 }
