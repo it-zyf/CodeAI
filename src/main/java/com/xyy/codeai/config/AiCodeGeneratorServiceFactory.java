@@ -7,7 +7,7 @@ import com.xyy.codeai.exception.ErrorCode;
 import com.xyy.codeai.model.enums.CodeGenTypeEnum;
 import com.xyy.codeai.service.AiCodeGeneratorService;
 import com.xyy.codeai.service.ChatHistoryService;
-import com.xyy.codeai.tools.FileWriteTool;
+import com.xyy.codeai.tools.ToolManager;
 import dev.langchain4j.community.store.memory.chat.redis.RedisChatMemoryStore;
 import dev.langchain4j.data.message.ToolExecutionResultMessage;
 import dev.langchain4j.memory.chat.MessageWindowChatMemory;
@@ -38,6 +38,9 @@ public class AiCodeGeneratorServiceFactory {
 
     @Resource
     private StreamingChatModel reasoningStreamingChatModel;
+
+    @Resource
+    private ToolManager toolManager;
 
 
     /**
@@ -92,7 +95,7 @@ public class AiCodeGeneratorServiceFactory {
             case VUE_PROJECT -> AiServices.builder(AiCodeGeneratorService.class)
                     .streamingChatModel(reasoningStreamingChatModel)
                     .chatMemoryProvider(memoryId -> chatMemory)
-                    .tools(new FileWriteTool())
+                    .tools(toolManager.getAllTools())
                     .hallucinatedToolNameStrategy(toolExecutionRequest -> ToolExecutionResultMessage.from(
                             toolExecutionRequest, "Error: there is no tool called " + toolExecutionRequest.name()
                     ))
