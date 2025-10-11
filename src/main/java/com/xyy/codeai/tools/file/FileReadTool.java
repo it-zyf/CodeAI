@@ -1,7 +1,8 @@
-package com.xyy.codeai.tools;
+package com.xyy.codeai.tools.file;
 
 import cn.hutool.json.JSONObject;
 import com.xyy.codeai.constant.AppConstant;
+import com.xyy.codeai.tools.BaseTool;
 import dev.langchain4j.agent.tool.P;
 import dev.langchain4j.agent.tool.Tool;
 import dev.langchain4j.agent.tool.ToolMemoryId;
@@ -19,7 +20,7 @@ import java.nio.file.Paths;
  */
 @Slf4j
 @Component
-public class FileReadTool extends BaseTool{
+public class FileReadTool extends BaseTool {
 
     @Override
     public String getToolName() {
